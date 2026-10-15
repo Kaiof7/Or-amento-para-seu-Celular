@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Troque [NOME DA LOJA] e [CIDADE] aqui e no resto da página -->
+<title>[NOME DA LOJA] — Conserto de celular em [CIDADE] | Orçamento online</title>
+<meta name="description" content="Assistência técnica de celulares em [CIDADE]. Faça o orçamento do conserto em 1 minuto e envie pelo WhatsApp: tela, bateria, conector, câmera e mais.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="[NOME DA LOJA] — Assistência técnica de celulares em [CIDADE]">
+<meta property="og:description" content="Orçamento do seu celular em 1 minuto. Escolha o serviço, veja o valor e envie pelo WhatsApp.">
+<meta name="theme-color" content="#0d0e10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* [COR PRINCIPAL]: troque --acento (e --acento-fundo) */
+  :root {
+    color-scheme: dark;
+    --bg: #0d0e10; --bg-2: #121417; --sup: #171a1e; --linha: #25292f; --linha-2: #343941;
+    --texto: #ecebe7; --suave: #959ba5; --acento: #ff7a3d; --acento-fundo: rgba(255,122,61,.09);
+    --zap: #25d366; --zap-tinta: #04210e;
+    --sans: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font: 16px/1.55 var(--sans); color: var(--texto); background: var(--bg); padding-bottom: 128px;
+         -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--acento); color: #000; }
+  :focus-visible { outline: 2px solid var(--acento); outline-offset: 3px; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  .mono { font-family: var(--mono); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--suave); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; padding: 0 24px;
+         border: 1px solid transparent; border-radius: 6px; font: 600 1rem/1 var(--sans); text-decoration: none; cursor: pointer;
+         transition: background .15s, transform .15s; }
+  .btn-acento { background: var(--acento); color: #160800; }
+  .btn-acento:hover { background: #ff8d58; }
+  .btn-zap { background: var(--zap); color: var(--zap-tinta); width: 100%; font-weight: 700; }
+  .btn-zap:hover { background: #3ee07a; }
+  .btn svg { width: 20px; height: 20px; flex: none; }
+
+  /* Topo */
+  .topo { border-bottom: 1px solid var(--linha); }
+  .topo .wrap { display: flex; justify-content: space-between; align-items: center; min-height: 64px; gap: 16px; }
+  .marca { font-weight: 800; font-size: 1.1rem; letter-spacing: -.01em; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+  .marca i { width: 10px; height: 10px; background: var(--acento); border-radius: 2px; }
+  .hero { padding: 56px 0 0; }
+  .hero h1 { font-size: clamp(2.4rem, 9vw, 5rem); line-height: .98; letter-spacing: -.035em; font-weight: 700; margin: 18px 0 22px; max-width: 13ch; }
+  .hero h1 em { font-style: normal; color: var(--suave); }
+  .lead { font-size: 1.12rem; color: var(--suave); max-width: 46ch; margin: 0 0 32px; }
+  .lead b { color: var(--texto); font-weight: 500; }
+  .fatos { list-style: none; margin: 56px 0 0; padding: 0; display: grid; border-top: 1px solid var(--linha); }
+  .fatos li { padding: 18px 0; border-bottom: 1px solid var(--linha); color: var(--suave); display: flex; gap: 14px; }
+  .fatos li span { color: var(--acento); font-family: var(--mono); font-size: .8rem; padding-top: 3px; }
+  .fatos b { color: var(--texto); font-weight: 600; }
+
+  /* Calculadora */
+  #orcamento { padding: 72px 0; }
+  .titulo { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+  .titulo h2 { font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.05; letter-spacing: -.03em; margin: 0; font-weight: 700; }
+  .titulo p { margin: 0; color: var(--suave); }
+  .layout { display: grid; gap: 32px; }
+  fieldset { border: 0; padding: 0; margin: 0 0 44px; min-width: 0; }
+  legend { padding: 0; margin-bottom: 16px; font-size: 1.2rem; font-weight: 600; letter-spacing: -.01em; display: flex; align-items: baseline; gap: 12px; }
+  legend .idx { font-family: var(--mono); font-size: .8rem; font-weight: 500; color: var(--acento); }
+
+  .opcoes { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 8px; }
+  .opcao { position: relative; }
+  .opcao input { position: absolute; inset: 0; opacity: 0; margin: 0; }
+  .opcao span { display: flex; align-items: center; min-height: 54px; height: 100%; padding: 10px 14px; background: var(--bg-2);
+                border: 1px solid var(--linha); border-radius: 6px; font-weight: 500; cursor: pointer; transition: border-color .15s, background .15s; }
+  .opcao span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--linha-2); margin-right: 10px; flex: none; }
+  .opcao:hover span { border-color: var(--linha-2); }
+  .opcao input:checked + span { border-color: var(--acento); background: var(--acento-fundo); }
+  .opcao input:checked + span::before { background: var(--acento); border-color: var(--acento); }
+  .opcao input:focus-visible + span { outline: 2px solid var(--acento); outline-offset: 3px; }
+
+  label.campo { display: block; font-weight: 500; margin: 0 0 8px; font-size: .95rem; }
+  .opcional { color: var(--suave); font-weight: 400; }
+  input[type=text], input[type=tel], input[type=search], textarea {
+    width: 100%; min-height: 52px; padding: 13px 14px; font: inherit; color: var(--texto); background: var(--bg-2);
+    border: 1px solid var(--linha-2); border-radius: 6px; transition: border-color .15s; }
+  input::placeholder, textarea::placeholder { color: #626873; }
+  input:focus, textarea:focus { border-color: var(--acento); outline: none; box-shadow: 0 0 0 3px var(--acento-fundo); }
+  textarea { min-height: 104px; resize: vertical; }
+  .grupo { margin-bottom: 20px; }
+  .dica { font-size: .85rem; color: var(--suave); margin: 6px 0 0; }
+  #busca-box { margin-bottom: 12px; }
+  .consulta { margin-top: 12px; padding: 16px; border: 1px solid var(--linha); border-left: 2px solid var(--acento); border-radius: 6px; background: var(--bg-2); }
+  .consulta p { margin: 10px 0 0; font-size: .9rem; color: var(--acento); }
+
+  /* Serviços em lista */
+  .servicos { border-top: 1px solid var(--linha); }
+  .servico { display: grid; grid-template-columns: 22px 1fr; gap: 4px 16px; padding: 18px 12px; border-bottom: 1px solid var(--linha);
+             cursor: pointer; transition: background .15s; }
+  .servico:hover { background: var(--bg-2); }
+  .servico:has(input:checked) { background: var(--acento-fundo); }
+  .servico .ico { display: none; color: var(--suave); }
+  .servico:has(input:checked) .ico { color: var(--acento); }
+  .ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .info { display: grid; gap: 2px; }
+  .info strong { font-weight: 600; }
+  .info small { color: var(--suave); font-size: .9rem; }
+  .preco { grid-column: 2; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-family: var(--mono); font-size: .88rem; margin-top: 6px; }
+  .preco b { font-weight: 500; color: var(--texto); }
+  .preco small { color: var(--suave); font-size: .8rem; }
+  .preco .consulta-tag { color: var(--acento); }
+
+  input[type=checkbox] { appearance: none; width: 20px; height: 20px; margin: 2px 0 0; border: 1px solid var(--linha-2); border-radius: 4px;
+                         background: var(--bg) center/12px no-repeat; cursor: pointer; flex: none; }
+  input[type=checkbox]:checked { background-color: var(--acento); border-color: var(--acento);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.5l2.5 2.5L10 3.5' fill='none' stroke='%23160800' stroke-width='2'/%3E%3C/svg%3E"); }
+
+  .dados { border: 1px solid var(--linha); border-radius: 8px; padding: 24px 16px; background: var(--bg-2); }
+  .dados legend { float: left; width: 100%; margin-bottom: 20px; }
+  .dados legend + * { clear: both; }
+  .dados input[type=text], .dados input[type=tel], .dados textarea { background: var(--bg); }
+  .dados .opcao span { background: var(--bg); }
+  .aceite { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; margin: 4px 0 20px; }
+
+  /* Resumo: rodapé fixo no celular, recibo lateral no desktop */
+  #resumo { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: rgba(18,20,23,.96); backdrop-filter: blur(10px);
+            border-top: 1px solid var(--linha-2); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
+  #resumo-toggle { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; width: 100%; min-height: 46px;
+                   padding: 0; background: none; border: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+  #resumo-toggle .mono { display: block; white-space: nowrap; }
+  #resumo-qtd { display: block; font-size: .85rem; color: var(--texto); white-space: nowrap; }
+  #resumo-total { font-family: var(--mono); font-weight: 500; font-size: .98rem; text-align: right; line-height: 1.3; }
+  #resumo-total small { display: block; font-size: .72rem; font-weight: 400; color: var(--suave); }
+  .seta { width: 18px; height: 18px; color: var(--suave); transition: transform .2s; }
+  #resumo.aberto .seta { transform: rotate(180deg); }
+  #resumo-lista { display: none; max-height: 45vh; overflow: auto; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--linha-2); }
+  #resumo.aberto #resumo-lista { display: block; }
+  .r-linha { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; font-size: .9rem; }
+  .r-linha span:last-child { font-family: var(--mono); font-size: .85rem; white-space: nowrap; text-align: right; }
+  #itens { list-style: none; margin: 0; padding: 0; }
+  #itens li { border-bottom: 1px dashed var(--linha); }
+  #itens:empty::after { content: "Nenhum serviço escolhido"; display: block; padding: 8px 0; color: var(--suave); font-size: .9rem; }
+  .aviso { margin: 8px 0 0; font-size: .76rem; line-height: 1.45; color: var(--suave); }
+
+  /* Como funciona */
+  .como { padding: 72px 0; border-top: 1px solid var(--linha); }
+  .passos { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; counter-reset: p; }
+  .passos li { padding: 24px; border: 1px solid var(--linha); border-radius: 10px; background: var(--bg-2); display: grid; grid-template-columns: 56px 1fr;
+               transition: border-color .25s, transform .25s; }
+  .passos li:hover { border-color: var(--linha-2); transform: translateY(-3px); }
+  .passos li::before { counter-increment: p; content: counter(p, decimal-leading-zero); font-family: var(--mono); color: var(--acento); font-size: .9rem; padding-top: 3px; }
+  .passos strong { display: block; font-size: 1.2rem; font-weight: 600; letter-spacing: -.01em; }
+  .passos p { margin: 4px 0 0; color: var(--suave); }
+
+  footer { border-top: 1px solid var(--linha); padding: 48px 0 32px; background: var(--bg-2); }
+  footer .wrap { display: grid; gap: 28px; }
+  footer h3 { margin: 0 0 10px; }
+  footer p { margin: 0; color: var(--texto); }
+  footer a { text-decoration-color: var(--linha-2); text-underline-offset: 4px; }
+  footer a:hover { text-decoration-color: var(--acento); }
+  .copy { font-size: .82rem; color: var(--suave) !important; padding-top: 20px; border-top: 1px solid var(--linha); }
+
+  .flutuante { position: fixed; right: 16px; bottom: 108px; z-index: 15; display: flex; align-items: center; justify-content: center; gap: 10px;
+               width: 54px; height: 54px; border-radius: 8px; background: var(--zap); color: var(--zap-tinta); font-weight: 700;
+               text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .flutuante:hover { background: #3ee07a; }
+  .flutuante svg { width: 24px; height: 24px; flex: none; }
+  .flutuante span { display: none; }
+
+  @media (min-width: 640px) {
+    .servico { grid-template-columns: 22px 30px 1fr auto; align-items: center; padding: 18px 16px; }
+    .servico .ico { display: block; }
+    .preco { grid-column: auto; flex-direction: column; align-items: flex-end; gap: 2px; margin: 0; text-align: right; }
+    .linha-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+    .dados { padding: 28px; }
+    .fatos { grid-template-columns: repeat(3, 1fr); }
+    .fatos li { padding: 20px 20px 20px 0; border-bottom: 0; }
+    .fatos li + li { padding-left: 20px; border-left: 1px solid var(--linha); }
+    .passos { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .passos li { grid-template-columns: 1fr; gap: 64px; padding: 28px; }
+    footer .wrap { grid-template-columns: 2fr 1fr 1fr; }
+    .copy { grid-column: 1 / -1; }
+    .flutuante { width: auto; padding: 0 18px; }
+    .flutuante span { display: inline; }
+  }
+  @media (min-width: 960px) {
+    body { padding-bottom: 0; }
+    .hero { padding-top: 96px; }
+    .layout { grid-template-columns: minmax(0, 1fr) 360px; gap: 56px; align-items: start; }
+    #resumo { position: sticky; top: 24px; display: flex; flex-direction: column; background: var(--bg-2); backdrop-filter: none;
+              border: 1px solid var(--linha); border-radius: 8px; padding: 24px; }
+    #resumo::before { content: "Orçamento estimado"; font-family: var(--mono); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase;
+                      color: var(--suave); padding-bottom: 14px; border-bottom: 1px solid var(--linha); }
+    #resumo-lista { display: block; order: 1; max-height: none; border-top: 0; margin-top: 4px; }
+    #resumo-toggle { order: 2; pointer-events: none; grid-template-columns: auto 1fr; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--linha-2); }
+    #resumo-total { font-size: 1.1rem; color: var(--acento); }
+    .aviso { order: 3; margin-top: 16px; }
+    .seta { display: none; }
+    .flutuante { bottom: 24px; }
+  }
+  /* ---------- Efeitos ---------- */
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @keyframes subir { from { opacity: 0; transform: translateY(18px); } }
+  @keyframes entrar { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes pop { 40% { transform: scale(1.2); } }
+  @keyframes flutuar { 50% { transform: translateY(-10px); } }
+  @keyframes prog { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes rolar { to { transform: translateX(-50%); } }
+  @keyframes piscar { 50% { opacity: .35; } }
+  @keyframes destaque { 0% { color: #fff; text-shadow: 0 0 18px rgba(255,122,61,.8); } }
+
+  /* fundo do topo: grade com brilho */
+  .hero { position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .55;
+    background-image: linear-gradient(var(--linha) 1px, transparent 1px), linear-gradient(90deg, var(--linha) 1px, transparent 1px);
+    background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse 70% 60% at 75% 30%, #000 10%, transparent 70%);
+    mask-image: radial-gradient(ellipse 70% 60% at 75% 30%, #000 10%, transparent 70%); }
+  .hero::after { content: ""; position: absolute; width: 520px; height: 520px; right: -160px; top: -200px; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,122,61,.16), transparent 65%); }
+  .hero .wrap { position: relative; z-index: 1; }
+  .hero-txt > * { animation: subir .8s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 90ms); }
+  .btn svg { transition: transform .2s; }
+  .btn-acento:hover svg { transform: translateY(3px); }
+  .btn-acento:active, .btn-zap:active { transform: scale(.98); }
+
+  /* card de orçamento animado no topo */
+  .hero-grid { display: grid; gap: 48px; align-items: center; }
+  .ticket-wrap { display: none; perspective: 1100px; animation: flutuar 7s ease-in-out infinite; }
+  .ticket { padding: 24px; border: 1px solid var(--linha-2); border-radius: 12px; background: linear-gradient(180deg, #1b1e23, #131518);
+            box-shadow: 0 40px 80px -30px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.05);
+            transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+  .t-topo { display: flex; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid var(--linha); }
+  .t-corpo { min-height: 168px; transition: opacity .3s, transform .3s; }
+  .t-corpo.trocando { opacity: 0; transform: translateY(8px); }
+  .t-aparelho { font-size: 1.35rem; font-weight: 600; letter-spacing: -.02em; margin: 16px 0 8px; }
+  .t-linha { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--linha); font-size: .92rem; }
+  .t-linha span:last-child { font-family: var(--mono); font-size: .85rem; }
+  .t-total { display: flex; justify-content: space-between; align-items: baseline; padding-top: 16px; }
+  .t-total strong { font-family: var(--mono); font-weight: 500; color: var(--acento); }
+  .t-status { display: flex; align-items: center; gap: 8px; margin-top: 18px; font-size: .85rem; color: var(--suave); }
+  .t-status i { width: 7px; height: 7px; border-radius: 50%; background: var(--zap); animation: piscar 1.6s infinite; }
+  .t-barra { height: 2px; margin-top: 14px; background: var(--linha); overflow: hidden; border-radius: 2px; }
+  .t-barra i { display: block; height: 100%; background: var(--acento); transform-origin: left; animation: prog 3.8s linear; }
+  @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.15fr .85fr; } .ticket-wrap { display: block; } }
+
+  /* faixa rolando com os serviços */
+  .faixa { overflow: hidden; border-block: 1px solid var(--linha); padding: 18px 0; margin-top: 72px;
+           -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+           mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .faixa-trilho { display: flex; width: max-content; animation: rolar 45s linear infinite; }
+  .faixa:hover .faixa-trilho { animation-play-state: paused; }
+  .faixa span { display: flex; align-items: center; gap: 28px; padding-right: 28px; font-size: 1.05rem; font-weight: 500; color: var(--suave); white-space: nowrap; }
+  .faixa span::after { content: ""; width: 6px; height: 6px; background: var(--acento); transform: rotate(45deg); }
+
+  /* brilho que segue o mouse */
+  .spot { position: relative; isolation: isolate; }
+  .spot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1; opacity: 0; transition: opacity .3s;
+                 background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(255,122,61,.11), transparent 60%); }
+  .spot:hover::after { opacity: 1; }
+
+  /* entradas */
+  #pedido > fieldset { animation: entrar .5s cubic-bezier(.2,.7,.2,1) both; }
+  .servico, #modelos .opcao { animation: entrar .45s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 35ms); }
+  .opcao span { transition: border-color .15s, background .15s, transform .2s; }
+  .opcao:hover span { transform: translateY(-2px); }
+  .servico { box-shadow: inset 0 0 0 var(--acento); transition: background .2s, box-shadow .25s; }
+  .servico:has(input:checked) { box-shadow: inset 3px 0 0 var(--acento); }
+  .servico .ico { transition: color .2s, transform .3s cubic-bezier(.3,1.6,.5,1); }
+  .servico:has(input:checked) .ico { transform: scale(1.12) rotate(-6deg); }
+  input[type=checkbox]:checked { animation: pop .3s; }
+  #resumo.pulso #resumo-total { animation: destaque .7s ease-out; }
+  .pre { opacity: 0; transform: translateY(22px); }
+  .pre.visivel { opacity: 1; transform: none; transition: opacity .7s, transform .7s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i, 0) * 90ms); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="#"><i aria-hidden="true"></i>[NOME DA LOJA]</a>
+    <span class="mono">[CIDADE]</span>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-txt">
+        <p class="mono" style="--i:0">Assistência técnica de celulares — [CIDADE]</p>
+        <h1 style="--i:1">Orçamento do seu celular <em>em 1 minuto.</em></h1>
+        <p class="lead" style="--i:2">Escolha o aparelho e o conserto, veja a faixa de preço na hora e mande o pedido <b>pronto pelo WhatsApp</b>. Sem cadastro, sem conversa de ida e volta.</p>
+        <a class="btn btn-acento" href="#orcamento" style="--i:3">Fazer orçamento
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 4v12M5 11l5 5 5-5"/></svg></a>
+      </div>
+      <div class="ticket-wrap" aria-hidden="true">
+        <div class="ticket spot" id="ticket">
+          <div class="t-topo"><span class="mono">Orçamento</span><span class="mono" id="t-num">#0427</span></div>
+          <div class="t-corpo" id="t-corpo"></div>
+          <div class="t-total"><span class="mono">Total estimado</span><strong id="t-total"></strong></div>
+          <div class="t-barra"><i id="t-prog"></i></div>
+          <div class="t-status"><i></i>Pedido pronto para enviar no WhatsApp</div>
+        </div>
+      </div>
+    </div>
+    <ul class="fatos">
+      <li><span>01</span><div><b>11 tipos de reparo</b><br>tela, bateria, conector, câmera e mais</div></li>
+      <li><span>02</span><div><b>Preço antes de sair de casa</b><br>faixa estimada para o seu modelo</div></li>
+      <li><span>03</span><div><b>Valor confirmado na loja</b><br>depois da avaliação do aparelho</div></li>
+    </ul>
+  </div>
+  <div class="faixa" aria-hidden="true"><div class="faixa-trilho" id="faixa"></div></div>
+</section>
+
+<section id="orcamento" aria-labelledby="titulo-orc">
+  <div class="wrap">
+    <div class="titulo">
+      <span class="mono">Orçamento</span>
+      <h2 id="titulo-orc">Monte seu orçamento</h2>
+      <p>Quatro passos. O total aparece enquanto você escolhe.</p>
+    </div>
+
+    <div class="layout">
+      <form id="pedido" novalidate>
+        <fieldset>
+          <legend><span class="idx">01</span>Marca do aparelho</legend>
+          <div class="opcoes">
+            <label class="opcao"><input type="radio" name="marca" value="Apple" required><span>Apple</span></label>
+            <label class="opcao"><input type="radio" name="marca" value="Samsung"><span>Samsung</span></label>
+            <label class="opcao"><input type="radio" name="marca" value="Motorola"><span>Motorola</span></label>
+            <label class="opcao"><input type="radio" name="marca" value="Xiaomi"><span>Xiaomi</span></label>
+            <label class="opcao"><input type="radio" name="marca" value="Outra"><span>Outra</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset id="passo-modelo" hidden>
+          <legend><span class="idx">02</span>Modelo</legend>
+          <div id="busca-box">
+            <label class="campo" for="busca">Buscar modelo</label>
+            <input type="search" id="busca" placeholder="Ex.: iPhone 13" autocomplete="off">
+          </div>
+          <div class="opcoes" id="modelos"></div>
+          <p class="dica" id="sem-resultado" hidden>Nenhum modelo encontrado. Escolha “Meu modelo não está na lista”.</p>
+          <div class="consulta" id="livre-box" hidden>
+            <label class="campo" for="modelo-livre">Marca e modelo do aparelho</label>
+            <input type="text" id="modelo-livre" name="modeloLivre" maxlength="60" placeholder="Ex.: Asus Zenfone 9" required disabled>
+            <p>Valor sob consulta — confirmamos pelo WhatsApp.</p>
+          </div>
+        </fieldset>
+
+        <fieldset id="passo-servicos" hidden>
+          <legend><span class="idx">03</span>O que precisa consertar</legend>
+          <p class="dica" style="margin:-8px 0 16px">Marque um ou mais serviços.</p>
+          <div class="servicos" id="servicos"></div>
+        </fieldset>
+
+        <fieldset id="dados" class="dados" hidden>
+          <legend><span class="idx">04</span>Seus dados</legend>
+          <div class="linha-2">
+            <div class="grupo">
+              <label class="campo" for="nome">Nome</label>
+              <input type="text" id="nome" name="nome" autocomplete="name" maxlength="60" required>
+            </div>
+            <div class="grupo">
+              <label class="campo" for="tel">WhatsApp</label>
+              <input type="tel" id="tel" name="tel" autocomplete="tel-national" inputmode="numeric" placeholder="(99) 99999-9999"
+                     pattern="\(\d{2}\) \d{5}-\d{4}" required aria-describedby="tel-dica">
+              <p class="dica" id="tel-dica">Com DDD, ex.: (11) 98765-4321</p>
+            </div>
+          </div>
+          <div class="grupo">
+            <label class="campo" for="descricao">Descrição do problema <span class="opcional">(opcional)</span></label>
+            <textarea id="descricao" name="descricao" maxlength="300" aria-describedby="contador" placeholder="Ex.: caiu no chão e a tela ficou piscando"></textarea>
+            <p class="dica" id="contador">0/300 caracteres</p>
+          </div>
+          <div class="linha-2">
+            <fieldset class="grupo" style="margin:0 0 20px">
+              <legend class="campo" style="font-size:.95rem;font-weight:500;margin-bottom:8px;float:none">Atendimento</legend>
+              <div class="opcoes" style="grid-template-columns:1fr 1fr">
+                <label class="opcao"><input type="radio" name="atendimento" value="Levar na loja" checked><span>Levar na loja</span></label>
+                <label class="opcao" id="op-busca"><input type="radio" name="atendimento" value="Busca em domicílio"><span>Busca em domicílio</span></label>
+              </div>
+            </fieldset>
+            <div class="grupo">
+              <label class="campo" for="horario">Melhor dia/período <span class="opcional">(opcional)</span></label>
+              <input type="text" id="horario" name="horario" maxlength="60" placeholder="Ex.: sábado de manhã">
+            </div>
+          </div>
+          <label class="aceite"><input type="checkbox" name="aceite" required>Concordo em ser contatado pelo WhatsApp</label>
+          <button type="submit" class="btn btn-zap">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3Z"/></svg>
+            Enviar pedido pelo WhatsApp
+          </button>
+        </fieldset>
+      </form>
+
+      <aside id="resumo" aria-label="Resumo do orçamento">
+        <button type="button" id="resumo-toggle" aria-expanded="false" aria-controls="resumo-lista">
+          <span><span class="mono">Total estimado</span><span id="resumo-qtd">Nenhum serviço</span></span>
+          <strong id="resumo-total">R$ 0,00</strong><span class="sr" id="total-sr" aria-live="polite"></span>
+          <svg class="seta" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12.5l5-5 5 5"/></svg>
+        </button>
+        <div id="resumo-lista">
+          <p class="r-linha" style="margin:0;border-bottom:1px dashed var(--linha)"><span>Aparelho</span><span id="resumo-aparelho">—</span></p>
+          <ul id="itens"></ul>
+        </div>
+        <p class="aviso">Valores estimados. O preço final é confirmado depois da avaliação do aparelho na loja.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="como" aria-labelledby="titulo-como">
+  <div class="wrap">
+    <div class="titulo">
+      <span class="mono">Como funciona</span>
+      <h2 id="titulo-como">Do orçamento ao conserto</h2>
+    </div>
+    <ol class="passos">
+      <li><div><strong>Escolha o serviço</strong><p>Marca, modelo e o que precisa consertar.</p></div></li>
+      <li><div><strong>Veja o valor</strong><p>A faixa de preço aparece na hora, sem cadastro.</p></div></li>
+      <li><div><strong>Envie pelo WhatsApp</strong><p>O pedido chega pronto e a loja confirma com você.</p></div></li>
+    </ol>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><h3 class="mono">Endereço</h3><p>[NOME DA LOJA]<br>[Rua Exemplo, 123 — Centro, [CIDADE]]</p>
+      <p style="margin-top:10px"><a href="https://maps.google.com/?q=[ENDERECO]" target="_blank" rel="noopener">Abrir no Google Maps ↗</a></p></div>
+    <div><h3 class="mono">Horário</h3><p>Seg a sex · 9h–18h<br>Sábado · 9h–13h</p></div>
+    <div><h3 class="mono">Redes</h3><p><a href="https://instagram.com/[USUARIO]" target="_blank" rel="noopener">Instagram ↗</a></p></div>
+    <p class="copy">© [NOME DA LOJA] · Valores sujeitos a avaliação técnica.</p>
+  </div>
+</footer>
+
+<a class="flutuante" id="flutuante" target="_blank" rel="noopener" aria-label="Falar direto com a loja pelo WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3Z"/></svg>
+  <span>Falar direto com a loja</span>
+</a>
+
+<script src="precos.js"></script>
+<script>
+const WHATSAPP_LOJA = "5500000000000"; // 55 + DDD + número, só dígitos. Ex.: "5511987654321"
+const OFERECE_BUSCA = true;            // false esconde a opção "Busca em domicílio"
+
+// Ícones de traço (24x24) por id de serviço
+const ICONES = {
+  tela: '<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 7l2.5 3-2 2 3 4"/>',
+  bateria: '<rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 10.5v3M7 10v4M10.5 10v4"/>',
+  conector: '<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0V8zM12 17v4"/>',
+  traseira: '<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><rect x="8.5" y="5" width="4" height="4" rx="1"/>',
+  camera: '<path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  audio: '<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>',
+  botoes: '<rect x="7" y="2.5" width="11" height="19" rx="2.5"/><path d="M4.5 7v3M4.5 12v4"/>',
+  molhado: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  software: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  acessorios: '<path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/>',
+  diagnostico: '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5.5 5.5"/>'
+};
+
+const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+const $ = id => document.getElementById(id);
+const form = $("pedido");
+const estado = { marca: "", modelo: null, livre: false, escolhidos: new Set() };
+const OUTRO = "__outro";
+const REDUZIR = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const faixaDe = s => estado.modelo?.servicos[s.id] || s.preco || null;
+const precoTxt = f => !f ? "Sob consulta" : f[1] === 0 ? "Grátis"
+  : f[0] === f[1] ? brl.format(f[0]) : `${brl.format(f[0])} a ${brl.format(f[1])}`;
+
+function totalTxt(faixas) {
+  const comPreco = faixas.filter(Boolean);
+  if (!comPreco.length) return "Sob consulta";
+  const t = comPreco.reduce((a, f) => [a[0] + f[0], a[1] + f[1]], [0, 0]);
+  return precoTxt(t) + (comPreco.length < faixas.length ? " + itens sob consulta" : "");
+}
+
+function montarMensagem(d) {
+  return [
+    "Olá! Vim pelo site e gostaria de um orçamento 📱", "",
+    `*Nome:* ${d.nome}`,
+    `*WhatsApp:* ${d.telefone}`,
+    `*Aparelho:* ${d.aparelho}`, "",
+    "*Serviços:*",
+    ...d.itens.map(i => `• ${i.nome} — ${precoTxt(i.faixa)}`), "",
+    `*Total estimado:* ${totalTxt(d.itens.map(i => i.faixa))}`,
+    d.atendimento && `*Atendimento:* ${d.atendimento}`,
+    d.horario && `*Preferência de horário:* ${d.horario}`,
+    `*Descrição do problema:* ${d.descricao || "Não informado"}`, "",
+    "Aguardo a confirmação do valor. Obrigado!"
+  ].filter(l => l || l === "").join("\n").replace(/ /g, " ");
+}
+
+const semAcento = t => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const aparelho = () => estado.livre ? $("modelo-livre").value.trim()
+  : `${estado.marca} ${estado.modelo?.modelo || ""}`.trim();
+
+function renderModelos() {
+  const lista = PRECOS.filter(p => p.marca === estado.marca);
+  $("modelos").innerHTML = lista.map((p, i) =>
+    `<label class="opcao" style="--i:${i}"><input type="radio" name="modelo" value="${p.modelo}" required><span>${p.modelo}</span></label>`
+  ).join("") + (lista.length ? `<label class="opcao"><input type="radio" name="modelo" value="${OUTRO}"><span>Meu modelo não está na lista</span></label>` : "");
+  $("busca").value = "";
+  $("busca-box").hidden = !lista.length;
+  $("sem-resultado").hidden = true;
+}
+
+function renderServicos() {
+  $("servicos").innerHTML = SERVICOS.map((s, i) => {
+    const f = faixaDe(s);
+    return `
+    <label class="servico spot" style="--i:${i}">
+      <input type="checkbox" name="servico" value="${s.id}" ${estado.escolhidos.has(s.id) ? "checked" : ""}>
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24">${ICONES[s.id] || ICONES.diagnostico}</svg></span>
+      <span class="info"><strong>${s.nome}</strong><small>${s.desc}</small></span>
+      <span class="preco"><b class="${f ? "" : "consulta-tag"}">${precoTxt(f)}</b><small>${s.prazo}</small></span>
+    </label>`;
+  }).join("");
+}
+
+function setLivre(livre) {
+  estado.livre = livre;
+  $("livre-box").hidden = !livre;
+  $("modelo-livre").disabled = !livre; // campo escondido não pode bloquear a validação
+}
+
+function atualizar() {
+  const itens = SERVICOS.filter(s => estado.escolhidos.has(s.id));
+  const pronto = estado.modelo || estado.livre;
+  $("passo-servicos").hidden = !pronto;
+  $("dados").hidden = !pronto || !itens.length;
+  $("resumo-aparelho").textContent = aparelho() || "—";
+  $("itens").innerHTML = itens.map(s => `<li class="r-linha"><span>${s.nome}</span><span>${precoTxt(faixaDe(s))}</span></li>`).join("");
+  mostrarTotal(itens.map(faixaDe));
+  $("resumo-qtd").textContent = !itens.length ? "Nenhum serviço" : itens.length === 1 ? "1 serviço" : `${itens.length} serviços`;
+}
+
+// Total com contagem animada; o leitor de tela recebe só o valor final
+let totalAtual = [0, 0], totalRaf;
+function mostrarTotal(faixas) {
+  const el = $("resumo-total");
+  const comPreco = faixas.filter(Boolean);
+  const final = faixas.length ? totalTxt(faixas) : brl.format(0);
+  $("total-sr").textContent = `Total estimado: ${final}`;
+  cancelAnimationFrame(totalRaf);
+  if (!comPreco.length) { el.textContent = final; totalAtual = [0, 0]; return; }
+  const alvo = comPreco.reduce((a, f) => [a[0] + f[0], a[1] + f[1]], [0, 0]);
+  const sufixo = comPreco.length < faixas.length ? "<small>+ itens sob consulta</small>" : "";
+  const de = totalAtual, t0 = performance.now(), dur = REDUZIR ? 0 : 500;
+  totalAtual = alvo;
+  const quadro = agora => {
+    const p = dur ? Math.min(1, (agora - t0) / dur) : 1, e = 1 - (1 - p) ** 3;
+    const v = [0, 1].map(i => Math.round(de[i] + (alvo[i] - de[i]) * e));
+    el.innerHTML = (p < 1 ? `${brl.format(v[0])} a ${brl.format(v[1])}` : precoTxt(v)) + sufixo;
+    if (p < 1) totalRaf = requestAnimationFrame(quadro);
+  };
+  totalRaf = requestAnimationFrame(quadro);
+  $("resumo").classList.remove("pulso"); void el.offsetWidth; $("resumo").classList.add("pulso");
+}
+
+form.addEventListener("change", e => {
+  const el = e.target;
+  if (el.name === "marca") {
+    estado.marca = el.value;
+    estado.modelo = null;
+    $("passo-modelo").hidden = false;
+    renderModelos();
+    setLivre(el.value === "Outra");
+    renderServicos();
+  } else if (el.name === "modelo") {
+    estado.modelo = PRECOS.find(p => p.marca === estado.marca && p.modelo === el.value) || null;
+    setLivre(el.value === OUTRO);
+    if (estado.livre) $("modelo-livre").focus();
+    renderServicos();
+  } else if (el.name === "servico") {
+    el.checked ? estado.escolhidos.add(el.value) : estado.escolhidos.delete(el.value);
+  }
+  atualizar();
+});
+
+$("modelo-livre").addEventListener("input", atualizar);
+
+$("busca").addEventListener("input", e => {
+  const q = semAcento(e.target.value.trim());
+  let visiveis = 0;
+  for (const label of $("modelos").children) {
+    const outro = label.querySelector("input").value === OUTRO;
+    const ok = outro || semAcento(label.textContent).includes(q);
+    label.hidden = !ok;
+    if (ok && !outro) visiveis++;
+  }
+  $("sem-resultado").hidden = visiveis > 0;
+});
+$("busca").addEventListener("keydown", e => { if (e.key === "Enter") e.preventDefault(); });
+
+$("tel").addEventListener("input", e => {
+  const d = e.target.value.replace(/\D/g, "").slice(0, 11);
+  e.target.value = d.length > 10 ? `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`
+    : d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`
+    : d.length > 2 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d;
+  e.target.setCustomValidity("");
+});
+
+$("descricao").addEventListener("input", e => { $("contador").textContent = `${e.target.value.length}/300 caracteres`; });
+
+$("resumo-toggle").addEventListener("click", () => {
+  const aberto = $("resumo").classList.toggle("aberto");
+  $("resumo-toggle").setAttribute("aria-expanded", aberto);
+});
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  if (!estado.escolhidos.size) return;
+  const tel = $("tel");
+  if (tel.validity.patternMismatch) tel.setCustomValidity("Informe o WhatsApp com DDD no formato (99) 99999-9999.");
+  if (!form.reportValidity()) return;
+  const msg = montarMensagem({
+    nome: form.nome.value.trim(),
+    telefone: tel.value,
+    aparelho: aparelho(),
+    itens: SERVICOS.filter(s => estado.escolhidos.has(s.id)).map(s => ({ nome: s.nome, faixa: faixaDe(s) })),
+    atendimento: form.atendimento.value,
+    horario: form.horario.value.trim(),
+    descricao: form.descricao.value.trim()
+  });
+  const url = `https://wa.me/${WHATSAPP_LOJA}?text=${encodeURIComponent(msg)}`;
+  const w = window.open(url, "_blank");
+  if (w) w.opener = null; else location.href = url; // pop-up bloqueado: abre na mesma aba
+});
+
+// Faixa rolando: lista duplicada para o loop não ter emenda
+$("faixa").innerHTML = SERVICOS.map(s => `<span>${s.nome}</span>`).join("").repeat(2);
+
+// Card do topo: alterna exemplos reais da tabela de preços
+(() => {
+  const exemplos = [["iPhone 13", ["tela", "bateria"]], ["Galaxy A55", ["tela", "diagnostico"]],
+                    ["Moto G84", ["conector", "bateria"]], ["Redmi Note 13", ["traseira", "camera"]]];
+  let n = 0, num = 427;
+  const mostrar = () => {
+    const [nomeModelo, ids] = exemplos[n++ % exemplos.length];
+    const modelo = PRECOS.find(p => p.modelo === nomeModelo);
+    const servs = ids.map(id => SERVICOS.find(s => s.id === id)).filter(Boolean);
+    const faixa = s => modelo?.servicos[s.id] || s.preco || null;
+    $("t-corpo").innerHTML = `<p class="t-aparelho">${modelo ? `${modelo.marca} ${modelo.modelo}` : nomeModelo}</p>` +
+      servs.map(s => `<div class="t-linha"><span>${s.nome}</span><span>${precoTxt(faixa(s))}</span></div>`).join("");
+    $("t-total").textContent = totalTxt(servs.map(faixa));
+    $("t-num").textContent = `#0${num++}`;
+    const barra = $("t-prog"); barra.style.animation = "none"; void barra.offsetWidth; barra.style.animation = "";
+  };
+  mostrar();
+  if (REDUZIR) return;
+  setInterval(() => {
+    $("t-corpo").classList.add("trocando");
+    setTimeout(() => { mostrar(); $("t-corpo").classList.remove("trocando"); }, 300);
+  }, 3800);
+
+  // inclinação 3D leve seguindo o mouse
+  const t = $("ticket");
+  t.parentElement.addEventListener("pointermove", e => {
+    const r = t.getBoundingClientRect();
+    t.style.setProperty("--ry", `${((e.clientX - r.left) / r.width - .5) * 10}deg`);
+    t.style.setProperty("--rx", `${((e.clientY - r.top) / r.height - .5) * -10}deg`);
+  });
+  t.parentElement.addEventListener("pointerleave", () => { t.style.removeProperty("--rx"); t.style.removeProperty("--ry"); });
+})();
+
+// Brilho que segue o mouse nos cards .spot
+document.addEventListener("pointermove", e => {
+  const el = e.target.closest?.(".spot");
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  el.style.setProperty("--my", `${e.clientY - r.top}px`);
+});
+
+// Revela blocos ao rolar a página
+if (!REDUZIR && "IntersectionObserver" in window) {
+  const io = new IntersectionObserver(entradas => entradas.forEach(({ isIntersecting, target }) => {
+    if (!isIntersecting) return;
+    io.unobserve(target);
+    target.classList.add("visivel");
+    setTimeout(() => target.classList.remove("pre", "visivel"), 1200); // devolve as transições de hover
+  }), { rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll("#orcamento .titulo, .como .titulo, .fatos li, .passos li, footer .wrap > *").forEach(el => {
+    el.style.setProperty("--i", [...el.parentElement.children].indexOf(el));
+    el.classList.add("pre");
+    io.observe(el);
+  });
+}
+document.querySelectorAll(".passos li").forEach(li => li.classList.add("spot"));
+
+$("op-busca").hidden = !OFERECE_BUSCA;
+$("flutuante").href = `https://wa.me/${WHATSAPP_LOJA}?text=${encodeURIComponent("Olá! Vim pelo site e queria falar com a loja.")}`;
+atualizar();
+
+// Autoteste: abra a página com ?teste e veja o console
+if (location.search === "?teste") {
+  const m = montarMensagem({ nome: "Ana", telefone: "(11) 98765-4321", aparelho: "Apple iPhone 13",
+    itens: [{ nome: "Tela", faixa: [600, 1100] }, { nome: "Bateria", faixa: [250, 380] }, { nome: "Molhado", faixa: null }, { nome: "Diagnóstico", faixa: [0, 0] }],
+    atendimento: "Levar na loja", horario: "", descricao: "" });
+  const ok = [
+    m.includes("*Total estimado:* R$ 850,00 a R$ 1.480,00 + itens sob consulta"),
+    m.includes("• Tela — R$ 600,00 a R$ 1.100,00"),
+    m.includes("• Molhado — Sob consulta"),
+    m.includes("• Diagnóstico — Grátis"),
+    !m.includes("Preferência de horário"),
+    m.includes("*Descrição do problema:* Não informado"),
+    totalTxt([null, null]) === "Sob consulta"
+  ].every(Boolean);
+  console[ok ? "log" : "error"]("autoteste", ok ? "ok" : "FALHOU", "\n" + m);
+}
+</script>
+</body>
+</html>
